@@ -75,7 +75,12 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier;
         this.x = canvaS.width;
         this.y = Math.random() * (canvaS.height - this.height);
-        this.directionX = Math.random() * 5 + 3;
+        if (canvaS.width <= 600) {
+            this.directionX = Math.random() * 1;
+        }
+        else {
+            this.directionX = Math.random() * 5 + 3;
+        }
         this.directionY = Math.random() * 5 - 2.5;
         this.markedForDeletion = false;
         this.creatureImage.src = "../assets/raven.png";
