@@ -226,7 +226,7 @@ function drawScore(): void {
 //gameOVer function
 function GAME_OVER(): void {
     ctxS.textAlign = "center"
-    ctxS.font = "80px Impact"
+    ctxS.font = "50px Impact"
     ctxS.fillStyle = "black"
     ctxS.fillText("GAME OVER", canvaS.width / 2 - 4, canvaS.height / 2 - 4)
     ctxS.fillStyle = "white"
@@ -234,6 +234,7 @@ function GAME_OVER(): void {
     ctxS.fillStyle = "rgb(230,120,60)"
     ctxS.fillText("GAME OVER", canvaS.width / 2, canvaS.height / 2)
     ctxS.fillStyle = "black"
+    ctxS.font = "40px Impact"
     ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 4, canvaS.height / 2 + 80 - 4)
     ctxS.fillStyle = "white"
     ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 2, canvaS.height / 2 + 80 - 2)
