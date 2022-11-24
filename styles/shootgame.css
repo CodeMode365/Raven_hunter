@@ -27,8 +27,38 @@ body {
   /* background: green; */
   font-weight: bold;
   /* font-size: 45px; */
+  /* background: yellow; */
 }
 
 body {
   cursor: url("../assets/crosshair.svg"), auto;
+}
+
+.replay {
+  position: absolute;
+  height: 90px;
+  width: 150px;
+  background-image: url("../assets//Button.png");
+  background-position: center;
+  background-size: cover;
+  z-index: 220;
+  transform: translate(-50%, -150%);
+  transition: 0.5s all;
+  top: 50%;
+  left: 50%;
+  /* display: none; */
+}
+.replay::before {
+  content: "Replay";
+  position: absolute;
+  top: 50%;
+  color: rgba(212, 154, 154, 0.822);
+  font-weight: bold;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  scale: 1.2;
+}
+.replay:hover {
+  scale: 1.04;
+  cursor: pointer;
 }

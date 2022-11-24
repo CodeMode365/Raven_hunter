@@ -1,4 +1,9 @@
 "use strict";
+const replayBtn = document.getElementById("replay");
+replayBtn.style.display = "none";
+replayBtn.onclick = () => {
+    window.location.reload();
+};
 const canvas = document.getElementById("shootGame");
 const ctxS = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -8,8 +13,19 @@ const collisionCTX = collisioncanvas.getContext("2d");
 collisioncanvas.width = window.innerWidth;
 collisioncanvas.height = window.innerHeight;
 const smallScreen = canvas.width <= 600 ? true : false;
-const speedIncreasingPoints = [50, 90, 130, 190, 220];
-const speedDecreadingPoints = [58, 98, 138, 198];
+const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000];
+const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980];
+let increaseSpeed = false;
+function manageSpeed() {
+    speedIncreasingPoints.forEach(incPoint => {
+        if (score === incPoint)
+            increaseSpeed = true;
+    });
+    speedDecreadingPoints.forEach(dcrPoint => {
+        if (score === dcrPoint)
+            increaseSpeed = false;
+    });
+}
 const music = new Audio();
 music.src = "../assets/sounds/music.mp3";
 function playMusic() {
@@ -19,10 +35,10 @@ function playMusic() {
     };
 }
 let timeToNextRaven = 0;
-const ravenIntarval = 500;
 let lastTime = 0;
 let score = 0;
-let gameOver = true;
+const ravenIntarval = score >= 20 ? 700 : score >= 30 ? 600 : score >= 40 ? 500 : score >= 50 ? 400 : score >= 60 ? 300 : score >= 80 ? 100 : 750;
+let gameOver = false;
 let overCount = 0;
 let explozers = [];
 let highScore;
@@ -78,15 +94,26 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier;
         this.x = canvas.width;
         this.y = Math.random() * (canvas.height - this.height);
-        if (smallScreen) {
-            this.directionX = Math.random() * 1 + .5;
+        if (increaseSpeed) {
+            this.creatureImage.src = "../assets/Boss2.png";
+            if (smallScreen) {
+                this.directionX = Math.random() * 3 + 3;
+            }
+            else {
+                this.directionX = Math.random() * 4 + 6;
+            }
         }
         else {
-            this.directionX = Math.random() * 5 + 3;
+            this.creatureImage.src = "../assets/raven.png";
+            if (smallScreen) {
+                this.directionX = Math.random() * 1 + 1;
+            }
+            else {
+                this.directionX = Math.random() * 2 + 3;
+            }
         }
         this.directionY = Math.random() * 5 - 2.5;
         this.markedForDeletion = false;
-        this.creatureImage.src = "../assets/raven.png";
         this.timeSinceFlap = 0;
         this.flapInterval = Math.random() * 50 + 50;
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
@@ -94,6 +121,7 @@ class Raven {
         this.hasTrail = Math.random() < .25;
     }
     update(deltaTime) {
+        console.log(this.directionX);
         this.x -= this.directionX;
         this.y += this.directionY;
         if (this.y < 0 || this.y > canvas.height - this.height) {
@@ -157,21 +185,21 @@ class Particle {
 function drawScore() {
     ctxS.font = "30px Impact";
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 50 + 40, 75);
+    ctxS.fillText("Score: " + score, 52, 75);
     ctxS.fillStyle = "white";
-    ctxS.fillText("Score: " + score, 52 + 40, 76);
-    ctxS.fillText("Score: " + score, 53 + 40, 76);
+    ctxS.fillText("Score: " + score, 53, 76);
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 54 + 40, 76);
+    ctxS.fillText("Score: " + score, 54, 76);
     ctxS.fillStyle = "black";
     ctxS.font = "25px Impact";
-    ctxS.fillText("Hight Score: " + highScore, 50 + 40, 136 - 30);
+    ctxS.fillText("High Score: " + highScore, 52, 136 - 30);
     ctxS.fillStyle = "white";
-    ctxS.fillText("Hight Score: " + highScore, 52 + 40, 136 - 30);
+    ctxS.fillText("High Score: " + highScore, 53, 136 - 30);
     ctxS.fillStyle = "black";
-    ctxS.fillText("Hight Score: " + highScore, 54 + 40, 136 - 30);
+    ctxS.fillText("High Score: " + highScore, 54, 136 - 30);
 }
 function GAME_OVER() {
+    replayBtn.style.display = "block";
     ctxS.textAlign = "center";
     ctxS.font = "30px Impact";
     ctxS.fillStyle = "black";
@@ -192,10 +220,10 @@ function GAME_OVER() {
     }
     overCount++;
     if (overCount <= 1) {
-        music.src = "../assets/sounds/end.mp3";
+        music.src = "../assets/sounds/crow.wav";
         music.play();
         music.onended = () => {
-            music.src = "";
+            music.src = "../assets/sounds/walk.mp3";
         };
     }
 }
@@ -234,10 +262,12 @@ function animate(timestamep) {
     [...particles, ...ravens, ...explozers].forEach((object) => {
         object.draw();
     });
+    manageSpeed();
     ravens = ravens.filter((raven) => !raven.markedForDeletion);
     explozers = explozers.filter((explozer) => !explozer.markedForDeletion);
     particles = particles.filter((particle) => !particle.markedTodeletion);
-    requestAnimationFrame(animate);
+    if (!gameOver)
+        requestAnimationFrame(animate);
     if (gameOver)
         GAME_OVER();
 }

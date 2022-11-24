@@ -1,3 +1,11 @@
+//replay button
+const replayBtn: HTMLDivElement = document.getElementById("replay")
+replayBtn.style.display = "none"
+
+replayBtn.onclick = () => {
+    window.location.reload()
+}
+
 
 
 
@@ -18,16 +26,21 @@ collisioncanvas.height = window.innerHeight
 //if small screen or no?
 const smallScreen = canvas.width <= 600 ? true : false
 
-// //scoring font size
-// const PrimarySize =smallScreen? "30px Impact" : "50px Impact"
-// const SecondarySize =smallScreen? "25px Impact" : "40px Impact"
+//incresing speed points
+const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000]
+const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980]
+let increaseSpeed = false
+/*incresing speed logic at some points */
+function manageSpeed(): void {
 
-// //x axis and y axis text management for small screen
-// const manageX =smallScreen? 30 : 0
-// const manageY =smallScreen? -30 : 0
+    speedIncreasingPoints.forEach(incPoint => {
+        if (score === incPoint) increaseSpeed = true
+    })
+    speedDecreadingPoints.forEach(dcrPoint => {
+        if (score === dcrPoint) increaseSpeed = false
+    })
+}
 
-const speedIncreasingPoints = [50, 90, 130, 190, 220]
-const speedDecreadingPoints = [58, 98, 138, 198]
 
 
 //main game music
@@ -43,10 +56,10 @@ function playMusic(): void {
 
 //reavens
 let timeToNextRaven: number = 0
-const ravenIntarval: number = 500
 let lastTime: number = 0
 let score = 0
-let gameOver: boolean = true
+const ravenIntarval: number = score >= 20 ? 700 : score >= 30 ? 600 : score >= 40 ? 500 : score >= 50 ? 400 : score >= 60 ? 300 : score >= 80 ? 100 : 750
+let gameOver: boolean = false
 let overCount: number = 0
 //all explosives
 let explozers: Explosion[] = []
@@ -128,18 +141,28 @@ class Raven {
         this.x = canvas.width
         this.y = Math.random() * (canvas.height - this.height)
 
-        if (smallScreen) {
-            this.directionX = Math.random() * 1 + .5
-        } else {
-            this.directionX = Math.random() * 5 + 3
-        }
         //for new creature in incresing score
-     
+        if (increaseSpeed) {
+            this.creatureImage.src = "../assets/Boss2.png"
+            if (smallScreen) {
+                this.directionX = Math.random() * 3 + 3
+            }
+            else {
+                this.directionX = Math.random() * 4 + 6
+            }
+        } else {
+            this.creatureImage.src = "../assets/raven.png"
+            if (smallScreen) {
+                this.directionX = Math.random() * 1 + 1
+            } else {
+                this.directionX = Math.random() * 2 + 3
+            }
+        }
 
 
         this.directionY = Math.random() * 5 - 2.5
         this.markedForDeletion = false
-        this.creatureImage.src = "../assets/raven.png"
+        // this.creatureImage.src = "../assets/raven.png"
         this.timeSinceFlap = 0
         this.flapInterval = Math.random() * 50 + 50
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)]
@@ -147,6 +170,7 @@ class Raven {
         this.hasTrail = Math.random() < .25
     }
     public update(deltaTime: number): void {
+        console.log(this.directionX)
         this.x -= this.directionX
         this.y += this.directionY
 
@@ -234,25 +258,25 @@ function drawScore(): void {
     //score
     ctxS.font = "30px Impact"
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 50 + 40, 75)
+    ctxS.fillText("Score: " + score, 52, 75)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Score: " + score, 52 + 40, 76)
-    ctxS.fillText("Score: " + score, 53 + 40, 76)
+    ctxS.fillText("Score: " + score, 53, 76)
     ctxS.fillStyle = "black"
-    ctxS.fillText("Score: " + score, 54 + 40, 76)
+    ctxS.fillText("Score: " + score, 54, 76)
     ctxS.fillStyle = "black"
     //highScore
     ctxS.font = "25px Impact"
-    ctxS.fillText("Hight Score: " + highScore, 50 + 40, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 52, 136 - 30)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Hight Score: " + highScore, 52 + 40, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 53, 136 - 30)
     ctxS.fillStyle = "black"
-    ctxS.fillText("Hight Score: " + highScore, 54 + 40, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 54, 136 - 30)
 }
 
 
 //gameOVer function
 function GAME_OVER(): void {
+    replayBtn.style.display = "block"
     ctxS.textAlign = "center"
     ctxS.font = "30px Impact"
     ctxS.fillStyle = "black"
@@ -274,10 +298,10 @@ function GAME_OVER(): void {
     }
     overCount++
     if (overCount <= 1) {
-        music.src = "../assets/sounds/end.mp3"
+        music.src = "../assets/sounds/crow.wav"
         music.play()
         music.onended = () => {
-            music.src = ""
+            music.src = "../assets/sounds/walk.mp3"
         }
     }
 }
@@ -323,12 +347,12 @@ function animate(timestamep: number): void {
     [...particles, ...ravens, ...explozers].forEach((object: (Raven | Explosion | Particle)): void => {
         object.draw()
     });
-
+    manageSpeed()
     ravens = ravens.filter((raven: Raven) => !raven.markedForDeletion)
     explozers = explozers.filter((explozer: Explosion) => !explozer.markedForDeletion)
     particles = particles.filter((particle: Particle) => !particle.markedTodeletion)
-    // if (!gameOver) requestAnimationFrame(animate)
-    requestAnimationFrame(animate)
+    if (!gameOver) requestAnimationFrame(animate)
+    // requestAnimationFrame(animate)
     if (gameOver) GAME_OVER()
 }
 
