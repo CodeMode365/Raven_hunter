@@ -2,19 +2,35 @@
 
 
 //main canavs
-const canvaS: HTMLCanvasElement = document.getElementById("shootGame")
-const ctxS: CanvasRenderingContext2D = canvaS.getContext("2d")
+const canvas: HTMLCanvasElement = document.getElementById("shootGame")
+const ctxS: CanvasRenderingContext2D = canvas.getContext("2d")
 
-canvaS.width = window.innerWidth
-canvaS.height = window.innerHeight
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
 //canvas for detecting collition
-const collisionCanvas: HTMLCanvasElement = document.getElementById("collisionCanvas")
-const collisionCTX: CanvasRenderingContext2D = collisionCanvas.getContext("2d")
+const collisioncanvas: HTMLCanvasElement = document.getElementById("collisionCanvas")
+const collisionCTX: CanvasRenderingContext2D = collisioncanvas.getContext("2d")
 
-collisionCanvas.width = window.innerWidth
-collisionCanvas.height = window.innerHeight
+collisioncanvas.width = window.innerWidth
+collisioncanvas.height = window.innerHeight
 
+//if small screen or no?
+const smallScreen = canvas.width <= 600 ? true : false
+
+// //scoring font size
+// const PrimarySize =smallScreen? "30px Impact" : "50px Impact"
+// const SecondarySize =smallScreen? "25px Impact" : "40px Impact"
+
+// //x axis and y axis text management for small screen
+// const manageX =smallScreen? 30 : 0
+// const manageY =smallScreen? -30 : 0
+
+const speedIncreasingPoints = [50, 90, 130, 190, 220]
+const speedDecreadingPoints = [58, 98, 138, 198]
+
+
+//main game music
 const music = new Audio()
 music.src = "../assets/sounds/music.mp3"
 
@@ -30,7 +46,7 @@ let timeToNextRaven: number = 0
 const ravenIntarval: number = 500
 let lastTime: number = 0
 let score = 0
-let gameOver: boolean = false
+let gameOver: boolean = true
 let overCount: number = 0
 //all explosives
 let explozers: Explosion[] = []
@@ -109,14 +125,18 @@ class Raven {
         this.spriteHeight = 194
         this.width = this.spriteWidth / 2 * this.sizeModifier
         this.height = this.spriteHeight / 2 * this.sizeModifier
-        this.x = canvaS.width
-        this.y = Math.random() * (canvaS.height - this.height)
+        this.x = canvas.width
+        this.y = Math.random() * (canvas.height - this.height)
 
-        if (canvaS.width <= 600) {
-            this.directionX = Math.random() * 1
+        if (smallScreen) {
+            this.directionX = Math.random() * 1 + .5
         } else {
             this.directionX = Math.random() * 5 + 3
         }
+        //for new creature in incresing score
+     
+
+
         this.directionY = Math.random() * 5 - 2.5
         this.markedForDeletion = false
         this.creatureImage.src = "../assets/raven.png"
@@ -130,7 +150,9 @@ class Raven {
         this.x -= this.directionX
         this.y += this.directionY
 
-        if (this.y < 0 || this.y > canvaS.height - this.height) {
+
+
+        if (this.y < 0 || this.y > canvas.height - this.height) {
             this.directionY = this.directionY * -1
         }
         this.timeSinceFlap += deltaTime;
@@ -207,39 +229,45 @@ class Particle {
 
 //scoring
 function drawScore(): void {
-    // ctxS.font = "30px Arial"
-    ctxS.font = "50px Impact"
-    ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 50, 75)
-    ctxS.fillStyle = "white"
-    ctxS.fillText("Score: " + score, 52, 76)
-    ctxS.fillText("Score: " + score, 53, 76)
-    ctxS.fillStyle = "black"
-    ctxS.fillText("Score: " + score, 54, 76)
-    ctxS.fillStyle = "black"
-    ctxS.font = "30px Impact"
 
-    ctxS.fillText("Hight Score: " + highScore, 54, 136)
+
+    //score
+    ctxS.font = "30px Impact"
+    ctxS.fillStyle = "black";
+    ctxS.fillText("Score: " + score, 50 + 40, 75)
+    ctxS.fillStyle = "white"
+    ctxS.fillText("Score: " + score, 52 + 40, 76)
+    ctxS.fillText("Score: " + score, 53 + 40, 76)
+    ctxS.fillStyle = "black"
+    ctxS.fillText("Score: " + score, 54 + 40, 76)
+    ctxS.fillStyle = "black"
+    //highScore
+    ctxS.font = "25px Impact"
+    ctxS.fillText("Hight Score: " + highScore, 50 + 40, 136 - 30)
+    ctxS.fillStyle = "white"
+    ctxS.fillText("Hight Score: " + highScore, 52 + 40, 136 - 30)
+    ctxS.fillStyle = "black"
+    ctxS.fillText("Hight Score: " + highScore, 54 + 40, 136 - 30)
 }
 
 
 //gameOVer function
 function GAME_OVER(): void {
     ctxS.textAlign = "center"
-    ctxS.font = "50px Impact"
+    ctxS.font = "30px Impact"
     ctxS.fillStyle = "black"
-    ctxS.fillText("GAME OVER", canvaS.width / 2 - 4, canvaS.height / 2 - 4)
+    ctxS.fillText("GAME OVER", canvas.width / 2 - 4, canvas.height / 2 - 4)
     ctxS.fillStyle = "white"
-    ctxS.fillText("GAME OVER", canvaS.width / 2 - 2, canvaS.height / 2 - 2)
+    ctxS.fillText("GAME OVER", canvas.width / 2 - 2, canvas.height / 2 - 2)
     ctxS.fillStyle = "rgb(230,120,60)"
-    ctxS.fillText("GAME OVER", canvaS.width / 2, canvaS.height / 2)
+    ctxS.fillText("GAME OVER", canvas.width / 2, canvas.height / 2)
     ctxS.fillStyle = "black"
-    ctxS.font = "40px Impact"
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 4, canvaS.height / 2 + 80 - 4)
+    ctxS.font = "35px Impact"
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2 - 4, canvas.height / 2 + 80 - 4 - 30)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 2, canvaS.height / 2 + 80 - 2)
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2 - 2, canvas.height / 2 + 80 - 2 - 30)
     ctxS.fillStyle = "rgb(64,134,74)"
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2, canvaS.height / 2 + 80)
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2, canvas.height / 2 + 80 - 30)
     if (score >= highScore) {
         localStorage.setItem("highScore", score.toLocaleString())
 
@@ -273,8 +301,8 @@ window.addEventListener("click", (e: MouseEvent) => {
 
 //to run the animation
 function animate(timestamep: number): void {
-    ctxS.clearRect(0, 0, canvaS.width, canvaS.height)
-    collisionCTX.clearRect(0, 0, canvaS.width, canvaS.height)
+    ctxS.clearRect(0, 0, canvas.width, canvas.height)
+    collisionCTX.clearRect(0, 0, canvas.width, canvas.height)
     const deltaTime = timestamep - lastTime
     lastTime = timestamep
     timeToNextRaven += deltaTime
@@ -299,7 +327,8 @@ function animate(timestamep: number): void {
     ravens = ravens.filter((raven: Raven) => !raven.markedForDeletion)
     explozers = explozers.filter((explozer: Explosion) => !explozer.markedForDeletion)
     particles = particles.filter((particle: Particle) => !particle.markedTodeletion)
-    if (!gameOver) requestAnimationFrame(animate)
+    // if (!gameOver) requestAnimationFrame(animate)
+    requestAnimationFrame(animate)
     if (gameOver) GAME_OVER()
 }
 

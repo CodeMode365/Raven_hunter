@@ -1,12 +1,15 @@
 "use strict";
-const canvaS = document.getElementById("shootGame");
-const ctxS = canvaS.getContext("2d");
-canvaS.width = window.innerWidth;
-canvaS.height = window.innerHeight;
-const collisionCanvas = document.getElementById("collisionCanvas");
-const collisionCTX = collisionCanvas.getContext("2d");
-collisionCanvas.width = window.innerWidth;
-collisionCanvas.height = window.innerHeight;
+const canvas = document.getElementById("shootGame");
+const ctxS = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const collisioncanvas = document.getElementById("collisionCanvas");
+const collisionCTX = collisioncanvas.getContext("2d");
+collisioncanvas.width = window.innerWidth;
+collisioncanvas.height = window.innerHeight;
+const smallScreen = canvas.width <= 600 ? true : false;
+const speedIncreasingPoints = [50, 90, 130, 190, 220];
+const speedDecreadingPoints = [58, 98, 138, 198];
 const music = new Audio();
 music.src = "../assets/sounds/music.mp3";
 function playMusic() {
@@ -19,7 +22,7 @@ let timeToNextRaven = 0;
 const ravenIntarval = 500;
 let lastTime = 0;
 let score = 0;
-let gameOver = false;
+let gameOver = true;
 let overCount = 0;
 let explozers = [];
 let highScore;
@@ -73,10 +76,10 @@ class Raven {
         this.spriteHeight = 194;
         this.width = this.spriteWidth / 2 * this.sizeModifier;
         this.height = this.spriteHeight / 2 * this.sizeModifier;
-        this.x = canvaS.width;
-        this.y = Math.random() * (canvaS.height - this.height);
-        if (canvaS.width <= 600) {
-            this.directionX = Math.random() * 1;
+        this.x = canvas.width;
+        this.y = Math.random() * (canvas.height - this.height);
+        if (smallScreen) {
+            this.directionX = Math.random() * 1 + .5;
         }
         else {
             this.directionX = Math.random() * 5 + 3;
@@ -93,7 +96,7 @@ class Raven {
     update(deltaTime) {
         this.x -= this.directionX;
         this.y += this.directionY;
-        if (this.y < 0 || this.y > canvaS.height - this.height) {
+        if (this.y < 0 || this.y > canvas.height - this.height) {
             this.directionY = this.directionY * -1;
         }
         this.timeSinceFlap += deltaTime;
@@ -152,34 +155,38 @@ class Particle {
     }
 }
 function drawScore() {
-    ctxS.font = "50px Impact";
-    ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 50, 75);
-    ctxS.fillStyle = "white";
-    ctxS.fillText("Score: " + score, 52, 76);
-    ctxS.fillText("Score: " + score, 53, 76);
-    ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 54, 76);
-    ctxS.fillStyle = "black";
     ctxS.font = "30px Impact";
-    ctxS.fillText("Hight Score: " + highScore, 54, 136);
+    ctxS.fillStyle = "black";
+    ctxS.fillText("Score: " + score, 50 + 40, 75);
+    ctxS.fillStyle = "white";
+    ctxS.fillText("Score: " + score, 52 + 40, 76);
+    ctxS.fillText("Score: " + score, 53 + 40, 76);
+    ctxS.fillStyle = "black";
+    ctxS.fillText("Score: " + score, 54 + 40, 76);
+    ctxS.fillStyle = "black";
+    ctxS.font = "25px Impact";
+    ctxS.fillText("Hight Score: " + highScore, 50 + 40, 136 - 30);
+    ctxS.fillStyle = "white";
+    ctxS.fillText("Hight Score: " + highScore, 52 + 40, 136 - 30);
+    ctxS.fillStyle = "black";
+    ctxS.fillText("Hight Score: " + highScore, 54 + 40, 136 - 30);
 }
 function GAME_OVER() {
     ctxS.textAlign = "center";
-    ctxS.font = "50px Impact";
+    ctxS.font = "30px Impact";
     ctxS.fillStyle = "black";
-    ctxS.fillText("GAME OVER", canvaS.width / 2 - 4, canvaS.height / 2 - 4);
+    ctxS.fillText("GAME OVER", canvas.width / 2 - 4, canvas.height / 2 - 4);
     ctxS.fillStyle = "white";
-    ctxS.fillText("GAME OVER", canvaS.width / 2 - 2, canvaS.height / 2 - 2);
+    ctxS.fillText("GAME OVER", canvas.width / 2 - 2, canvas.height / 2 - 2);
     ctxS.fillStyle = "rgb(230,120,60)";
-    ctxS.fillText("GAME OVER", canvaS.width / 2, canvaS.height / 2);
+    ctxS.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
     ctxS.fillStyle = "black";
-    ctxS.font = "40px Impact";
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 4, canvaS.height / 2 + 80 - 4);
+    ctxS.font = "35px Impact";
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2 - 4, canvas.height / 2 + 80 - 4 - 30);
     ctxS.fillStyle = "white";
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2 - 2, canvaS.height / 2 + 80 - 2);
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2 - 2, canvas.height / 2 + 80 - 2 - 30);
     ctxS.fillStyle = "rgb(64,134,74)";
-    ctxS.fillText("Your Score is: " + score, canvaS.width / 2, canvaS.height / 2 + 80);
+    ctxS.fillText("Your Score is: " + score, canvas.width / 2, canvas.height / 2 + 80 - 30);
     if (score >= highScore) {
         localStorage.setItem("highScore", score.toLocaleString());
     }
@@ -207,8 +214,8 @@ window.addEventListener("click", (e) => {
         highScore = score;
 });
 function animate(timestamep) {
-    ctxS.clearRect(0, 0, canvaS.width, canvaS.height);
-    collisionCTX.clearRect(0, 0, canvaS.width, canvaS.height);
+    ctxS.clearRect(0, 0, canvas.width, canvas.height);
+    collisionCTX.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timestamep - lastTime;
     lastTime = timestamep;
     timeToNextRaven += deltaTime;
@@ -230,8 +237,7 @@ function animate(timestamep) {
     ravens = ravens.filter((raven) => !raven.markedForDeletion);
     explozers = explozers.filter((explozer) => !explozer.markedForDeletion);
     particles = particles.filter((particle) => !particle.markedTodeletion);
-    if (!gameOver)
-        requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
     if (gameOver)
         GAME_OVER();
 }
