@@ -58,15 +58,34 @@ function playMusic(): void {
 let timeToNextRaven: number = 0
 let lastTime: number = 0
 let score = 0
-const ravenIntarval: number = score >= 20 ? 700 : score >= 30 ? 600 : score >= 40 ? 500 : score >= 50 ? 400 : score >= 60 ? 300 : score >= 80 ? 100 : 750
+let ravenIntarval: number = 900;
+//change raven interval with increaing score
+const changeRvnInterval = () => {
+    if (score <= 15) ravenIntarval = 750
+    else if (score <= 30) ravenIntarval = 900
+    else if (score <= 45) ravenIntarval = 850
+    else if (score <= 60) ravenIntarval = 800
+    else if (score <= 75) ravenIntarval = 750
+    else if (score <= 90) ravenIntarval = 700
+    else if (score <= 105) ravenIntarval = 650
+    else if (score <= 120) ravenIntarval = 600
+    else if (score <= 135) ravenIntarval = 550
+    else if (score <= 150) ravenIntarval = 500
+    else if (score <= 165) ravenIntarval = 450
+    else if (score <= 180) ravenIntarval = 400
+    else if (score <= 195) ravenIntarval = 350
+    else if (score >= 210) ravenIntarval = 300
+
+}
 let gameOver: boolean = false
 let overCount: number = 0
+
+
 //all explosives
 let explozers: Explosion[] = []
 let highScore: number;
 //setLocal storage value for hight score
 if (localStorage.getItem("highScore")) {
-    // console.log(localStorage.getItem('highScore'))
     highScore = parseInt(localStorage.getItem("highScore"))
 
 } else {
@@ -170,7 +189,6 @@ class Raven {
         this.hasTrail = Math.random() < .25
     }
     public update(deltaTime: number): void {
-        console.log(this.directionX)
         this.x -= this.directionX
         this.y += this.directionY
 
@@ -276,6 +294,8 @@ function drawScore(): void {
 
 //gameOVer function
 function GAME_OVER(): void {
+
+
     replayBtn.style.display = "block"
     ctxS.textAlign = "center"
     ctxS.font = "30px Impact"
@@ -292,17 +312,23 @@ function GAME_OVER(): void {
     ctxS.fillText("Your Score is: " + score, canvas.width / 2 - 2, canvas.height / 2 + 80 - 2 - 30)
     ctxS.fillStyle = "rgb(64,134,74)"
     ctxS.fillText("Your Score is: " + score, canvas.width / 2, canvas.height / 2 + 80 - 30)
-    if (score >= highScore) {
-        localStorage.setItem("highScore", score.toLocaleString())
 
-    }
-    overCount++
-    if (overCount <= 1) {
+    if (score >= highScore) {
+        music.src = "../assets/sounds/walk.mp3"
+        music.play()
+        ctxS.textAlign = "center"
+        ctxS.font = "25px Impact"
+        ctxS.fillStyle = "black"
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 - 4 + 30, canvas.height / 2 + 80 - 4)
+        ctxS.fillStyle = "white"
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 - 2 + 30, canvas.height / 2 + 80 - 2)
+        ctxS.fillStyle = "red"
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 + 30, canvas.height / 2 + 80)
+        localStorage.setItem("highScore", score.toLocaleString())
+    } else {
         music.src = "../assets/sounds/crow.wav"
         music.play()
-        music.onended = () => {
-            music.src = "../assets/sounds/walk.mp3"
-        }
+
     }
 }
 
@@ -325,6 +351,7 @@ window.addEventListener("click", (e: MouseEvent) => {
 
 //to run the animation
 function animate(timestamep: number): void {
+    if (score < 220) changeRvnInterval();
     ctxS.clearRect(0, 0, canvas.width, canvas.height)
     collisionCTX.clearRect(0, 0, canvas.width, canvas.height)
     const deltaTime = timestamep - lastTime
@@ -352,7 +379,6 @@ function animate(timestamep: number): void {
     explozers = explozers.filter((explozer: Explosion) => !explozer.markedForDeletion)
     particles = particles.filter((particle: Particle) => !particle.markedTodeletion)
     if (!gameOver) requestAnimationFrame(animate)
-    // requestAnimationFrame(animate)
     if (gameOver) GAME_OVER()
 }
 

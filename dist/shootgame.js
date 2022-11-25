@@ -37,7 +37,37 @@ function playMusic() {
 let timeToNextRaven = 0;
 let lastTime = 0;
 let score = 0;
-const ravenIntarval = score >= 20 ? 700 : score >= 30 ? 600 : score >= 40 ? 500 : score >= 50 ? 400 : score >= 60 ? 300 : score >= 80 ? 100 : 750;
+let ravenIntarval = 900;
+const changeRvnInterval = () => {
+    if (score <= 15)
+        ravenIntarval = 750;
+    else if (score <= 30)
+        ravenIntarval = 900;
+    else if (score <= 45)
+        ravenIntarval = 850;
+    else if (score <= 60)
+        ravenIntarval = 800;
+    else if (score <= 75)
+        ravenIntarval = 750;
+    else if (score <= 90)
+        ravenIntarval = 700;
+    else if (score <= 105)
+        ravenIntarval = 650;
+    else if (score <= 120)
+        ravenIntarval = 600;
+    else if (score <= 135)
+        ravenIntarval = 550;
+    else if (score <= 150)
+        ravenIntarval = 500;
+    else if (score <= 165)
+        ravenIntarval = 450;
+    else if (score <= 180)
+        ravenIntarval = 400;
+    else if (score <= 195)
+        ravenIntarval = 350;
+    else if (score >= 210)
+        ravenIntarval = 300;
+};
 let gameOver = false;
 let overCount = 0;
 let explozers = [];
@@ -121,7 +151,6 @@ class Raven {
         this.hasTrail = Math.random() < .25;
     }
     update(deltaTime) {
-        console.log(this.directionX);
         this.x -= this.directionX;
         this.y += this.directionY;
         if (this.y < 0 || this.y > canvas.height - this.height) {
@@ -216,15 +245,21 @@ function GAME_OVER() {
     ctxS.fillStyle = "rgb(64,134,74)";
     ctxS.fillText("Your Score is: " + score, canvas.width / 2, canvas.height / 2 + 80 - 30);
     if (score >= highScore) {
+        music.src = "../assets/sounds/walk.mp3";
+        music.play();
+        ctxS.textAlign = "center";
+        ctxS.font = "25px Impact";
+        ctxS.fillStyle = "black";
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 - 4 + 30, canvas.height / 2 + 80 - 4);
+        ctxS.fillStyle = "white";
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 - 2 + 30, canvas.height / 2 + 80 - 2);
+        ctxS.fillStyle = "red";
+        ctxS.fillText("Ya woo you got high Score 🥳🥳", canvas.width / 2 + 30, canvas.height / 2 + 80);
         localStorage.setItem("highScore", score.toLocaleString());
     }
-    overCount++;
-    if (overCount <= 1) {
+    else {
         music.src = "../assets/sounds/crow.wav";
         music.play();
-        music.onended = () => {
-            music.src = "../assets/sounds/walk.mp3";
-        };
     }
 }
 window.addEventListener("click", (e) => {
@@ -242,6 +277,8 @@ window.addEventListener("click", (e) => {
         highScore = score;
 });
 function animate(timestamep) {
+    if (score < 220)
+        changeRvnInterval();
     ctxS.clearRect(0, 0, canvas.width, canvas.height);
     collisionCTX.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timestamep - lastTime;
