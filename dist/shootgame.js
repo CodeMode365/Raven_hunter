@@ -130,16 +130,16 @@ class Raven {
                 this.directionX = Math.random() * 3 + 3;
             }
             else {
-                this.directionX = Math.random() * 4 + 6;
+                this.directionX = Math.random() * 5.5 + 7;
             }
         }
         else {
             this.creatureImage.src = "../assets/raven.png";
             if (smallScreen) {
-                this.directionX = Math.random() * 1 + 1;
+                this.directionX = Math.random() * 2 + 1;
             }
             else {
-                this.directionX = Math.random() * 2 + 3;
+                this.directionX = Math.random() * 4 + 3;
             }
         }
         this.directionY = Math.random() * 5 - 2.5;
