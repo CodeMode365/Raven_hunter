@@ -111,6 +111,38 @@ class Explosion {
         ctxS.drawImage(this.explodeImage, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y - this.size / 4, this.size, this.size);
     }
 }
+let Items = [];
+class Item {
+    constructor(x, y) {
+        this.spriteWidth = 150;
+        this.spriteHeight = 150;
+        this.itemImage = new Image();
+        this.itemEffect = new Audio();
+        this.frame = 1;
+        this.timeSinceLastFrame = 0;
+        this.frameInterval = 100;
+        this.markedForDeletion = false;
+        this.x = x;
+        this.y = y;
+        this.itemImage.src = "../assets/booster.png";
+        this.itemEffect.src = "../assets/sounds/coins.wav";
+        this.itemEffect.play();
+    }
+    update(deltaTime) {
+        if (this.timeSinceLastFrame > this.frameInterval) {
+            this.frame++;
+            this.timeSinceLastFrame = 0;
+            if (this.frame > 5) {
+                this.markedForDeletion = true;
+            }
+        }
+    }
+    draw() {
+        ctxS.fillStyle = "black";
+        ctxS.strokeRect(this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3);
+        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3);
+    }
+}
 let ravens = [];
 class Raven {
     constructor() {
@@ -148,7 +180,7 @@ class Raven {
         this.flapInterval = Math.random() * 50 + 50;
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
         this.GenColor = `rgba(${this.randmColor[0]},${this.randmColor[1]},${this.randmColor[2]})`;
-        this.hasTrail = Math.random() < .25;
+        this.hasTrail = Math.random() < .5;
     }
     update(deltaTime) {
         this.x -= this.directionX;
@@ -270,7 +302,12 @@ window.addEventListener("click", (e) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true;
             score++;
-            explozers.push(new Explosion(raven.x, raven.y, raven.width));
+            if (Math.random() * 4 > .2) {
+                explozers.push(new Explosion(raven.x, raven.y, raven.width));
+            }
+            else {
+                Items.push(new Item(raven.x, raven.y));
+            }
         }
     });
     if (score > highScore)
@@ -293,16 +330,17 @@ function animate(timestamep) {
             return a.width - b.width;
         });
     }
-    [...particles, ...ravens, ...explozers].forEach((object) => {
+    [...particles, ...ravens, ...explozers, ...Items].forEach((object) => {
         object.update(deltaTime);
     });
-    [...particles, ...ravens, ...explozers].forEach((object) => {
+    [...particles, ...ravens, ...explozers, ...Items].forEach((object) => {
         object.draw();
     });
     manageSpeed();
     ravens = ravens.filter((raven) => !raven.markedForDeletion);
     explozers = explozers.filter((explozer) => !explozer.markedForDeletion);
     particles = particles.filter((particle) => !particle.markedTodeletion);
+    Items = Items.filter((item) => !item.markedForDeletion);
     if (!gameOver)
         requestAnimationFrame(animate);
     if (gameOver)

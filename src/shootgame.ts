@@ -5,10 +5,6 @@ replayBtn.style.display = "none"
 replayBtn.onclick = () => {
     window.location.reload()
 }
-
-
-
-
 //main canavs
 const canvas: HTMLCanvasElement = document.getElementById("shootGame")
 const ctxS: CanvasRenderingContext2D = canvas.getContext("2d")
@@ -130,6 +126,45 @@ class Explosion {
     }
 }
 
+let Items: Item[] = []
+
+class Item {
+    private spriteWidth = 150
+    private spriteHeight = 150
+    private itemImage: HTMLImageElement = new Image()
+    private itemEffect: HTMLAudioElement = new Audio()
+    private x: number
+    private y: number
+    private frame = 1
+    private timeSinceLastFrame = 0
+    private frameInterval = 100
+    public markedForDeletion = false
+    constructor(x: number, y: number) {
+        this.x = x
+        this.y = y
+        this.itemImage.src = "../assets/booster.png"
+        this.itemEffect.src = "../assets/sounds/coins.wav"
+        this.itemEffect.play()
+        // this.size = size
+    }
+    public update(deltaTime: number): void {
+        // increaing the frame picture slowly
+        if (this.timeSinceLastFrame > this.frameInterval) {
+            this.frame++
+            this.timeSinceLastFrame = 0
+            if (this.frame > 5) { this.markedForDeletion = true }
+        }
+
+    }
+    public draw(): void {
+        ctxS.fillStyle = "black"
+        ctxS.strokeRect(this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3)
+        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3)
+        // ctxS.drawImage(this.itemImage, this.x, this.y, this.spriteWidth, this.spriteHeight)
+    }
+}
+
+
 //ravens
 let ravens: Raven[] = []
 class Raven {
@@ -186,7 +221,7 @@ class Raven {
         this.flapInterval = Math.random() * 50 + 50
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)]
         this.GenColor = `rgba(${this.randmColor[0]},${this.randmColor[1]},${this.randmColor[2]})`
-        this.hasTrail = Math.random() < .25
+        this.hasTrail = Math.random() < .5
     }
     public update(deltaTime: number): void {
         this.x -= this.directionX
@@ -230,8 +265,6 @@ class Raven {
 
 //particel class
 let particles: Particle[] = []
-
-
 class Particle {
     private x: number
     private y: number
@@ -343,7 +376,12 @@ window.addEventListener("click", (e: MouseEvent) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true
             score++
-            explozers.push(new Explosion(raven.x, raven.y, raven.width))
+            if (Math.random() * 4 > .2) {
+                explozers.push(new Explosion(raven.x, raven.y, raven.width))
+            } else {
+                //draw booster here
+                Items.push(new Item(raven.x, raven.y))
+            }
         }
     })
     if (score > highScore) highScore = score
@@ -368,16 +406,18 @@ function animate(timestamep: number): void {
         })
     }
 
-    [...particles, ...ravens, ...explozers].forEach((object: (Raven | Explosion | Particle)): void => {
+    [...particles, ...ravens, ...explozers, ...Items].forEach((object: (Raven | Explosion | Particle | Item)): void => {
         object.update(deltaTime)
     });
-    [...particles, ...ravens, ...explozers].forEach((object: (Raven | Explosion | Particle)): void => {
+    [...particles, ...ravens, ...explozers, ...Items].forEach((object: (Raven | Explosion | Particle | Item)): void => {
         object.draw()
     });
     manageSpeed()
     ravens = ravens.filter((raven: Raven) => !raven.markedForDeletion)
     explozers = explozers.filter((explozer: Explosion) => !explozer.markedForDeletion)
     particles = particles.filter((particle: Particle) => !particle.markedTodeletion)
+    Items = Items.filter((item: Item) => !item.markedForDeletion)
+    // particles = particles.filter((particle: Particle) => !particle.markedTodeletion)
     if (!gameOver) requestAnimationFrame(animate)
     if (gameOver) GAME_OVER()
 }
