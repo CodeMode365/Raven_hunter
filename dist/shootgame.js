@@ -70,6 +70,7 @@ const changeRvnInterval = () => {
 };
 let gameOver = false;
 let overCount = 0;
+let power = 0;
 let explozers = [];
 let highScore;
 if (localStorage.getItem("highScore")) {
@@ -122,6 +123,8 @@ class Item {
         this.timeSinceLastFrame = 0;
         this.frameInterval = 100;
         this.markedForDeletion = false;
+        this.width = this.spriteWidth / 3;
+        this.height = this.spriteHeight / 3;
         this.x = x;
         this.y = y;
         this.itemImage.src = "../assets/booster.png";
@@ -129,18 +132,10 @@ class Item {
         this.itemEffect.play();
     }
     update(deltaTime) {
-        if (this.timeSinceLastFrame > this.frameInterval) {
-            this.frame++;
-            this.timeSinceLastFrame = 0;
-            if (this.frame > 5) {
-                this.markedForDeletion = true;
-            }
-        }
     }
     draw() {
         ctxS.fillStyle = "black";
-        ctxS.strokeRect(this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3);
-        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3);
+        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
     }
 }
 let ravens = [];
@@ -246,18 +241,25 @@ class Particle {
 function drawScore() {
     ctxS.font = "30px Impact";
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 52, 75);
+    ctxS.fillText("Score: " + score, 52, 78);
     ctxS.fillStyle = "white";
-    ctxS.fillText("Score: " + score, 53, 76);
+    ctxS.fillText("Score: " + score, 53, 79);
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 54, 76);
+    ctxS.fillText("Score: " + score, 54, 79);
     ctxS.fillStyle = "black";
     ctxS.font = "25px Impact";
-    ctxS.fillText("High Score: " + highScore, 52, 136 - 30);
+    ctxS.fillText("Power: " + power, 52, 45);
     ctxS.fillStyle = "white";
-    ctxS.fillText("High Score: " + highScore, 53, 136 - 30);
+    ctxS.fillText("Power: " + power, 53, 46);
+    ctxS.fillStyle = "green";
+    ctxS.fillText("Power: " + power, 54, 47);
     ctxS.fillStyle = "black";
-    ctxS.fillText("High Score: " + highScore, 54, 136 - 30);
+    ctxS.font = "25px Impact";
+    ctxS.fillText("High Score: " + highScore, 52, 136 - 25);
+    ctxS.fillStyle = "white";
+    ctxS.fillText("High Score: " + highScore, 53, 136 - 25);
+    ctxS.fillStyle = "black";
+    ctxS.fillText("High Score: " + highScore, 54, 136 - 25);
 }
 function GAME_OVER() {
     replayBtn.style.display = "block";
@@ -302,7 +304,7 @@ window.addEventListener("click", (e) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true;
             score++;
-            if (Math.random() * 5 > .2) {
+            if (Math.random() * 5 > .1) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width));
             }
             else {
@@ -312,6 +314,28 @@ window.addEventListener("click", (e) => {
     });
     if (score > highScore)
         highScore = score;
+    Items.forEach((item) => {
+        const getItem = new Audio();
+        getItem.src = "../assets/sounds/getItem.wav";
+        if ((e.offsetX > item.x) &&
+            (e.offsetX < item.x + item.width) &&
+            (e.offsetY > item.y) &&
+            (e.offsetY < item.y + item.height)) {
+            getItem.play();
+            power++;
+            item.markedForDeletion = true;
+        }
+    });
+});
+window.addEventListener('keypress', (e) => {
+    if (e.key === " " && ravens.length !== 0 && power > 0) {
+        power--;
+        ravens.forEach((raven) => {
+            explozers.push(new Explosion(raven.x, raven.y, raven.width));
+            score++;
+            raven.markedForDeletion = true;
+        });
+    }
 });
 function animate(timestamep) {
     if (score < 220)
@@ -330,10 +354,10 @@ function animate(timestamep) {
             return a.width - b.width;
         });
     }
-    [...particles, ...ravens, ...explozers, ...Items].forEach((object) => {
+    [...Items, ...particles, ...ravens, ...explozers,].forEach((object) => {
         object.update(deltaTime);
     });
-    [...particles, ...ravens, ...explozers, ...Items].forEach((object) => {
+    [...Items, ...particles, ...ravens, ...explozers,].forEach((object) => {
         object.draw();
     });
     manageSpeed();

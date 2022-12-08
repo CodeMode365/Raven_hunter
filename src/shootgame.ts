@@ -76,6 +76,7 @@ const changeRvnInterval = () => {
 }
 let gameOver: boolean = false
 let overCount: number = 0
+let power = 0
 
 
 //all explosives
@@ -134,12 +135,14 @@ class Item {
     private spriteHeight = 150
     private itemImage: HTMLImageElement = new Image()
     private itemEffect: HTMLAudioElement = new Audio()
-    private x: number
-    private y: number
+    readonly x: number
+    readonly y: number
     private frame = 1
     private timeSinceLastFrame = 0
     private frameInterval = 100
     public markedForDeletion = false
+    readonly width = this.spriteWidth / 3
+    readonly height = this.spriteHeight / 3
     constructor(x: number, y: number) {
         this.x = x
         this.y = y
@@ -150,17 +153,16 @@ class Item {
     }
     public update(deltaTime: number): void {
         // increaing the frame picture slowly
-        if (this.timeSinceLastFrame > this.frameInterval) {
-            this.frame++
-            this.timeSinceLastFrame = 0
-            if (this.frame > 5) { this.markedForDeletion = true }
-        }
-
+        // if (this.timeSinceLastFrame > this.frameInterval) {
+        //     this.frame++
+        //     this.timeSinceLastFrame = 0
+        //     if (this.frame > 5) { this.markedForDeletion = true }
+        // }
     }
     public draw(): void {
         ctxS.fillStyle = "black"
-        ctxS.strokeRect(this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3)
-        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth / 3, this.spriteHeight / 3)
+        // ctxS.strokeRect(this.x, this.y, this.width, this.height)
+        ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
         // ctxS.drawImage(this.itemImage, this.x, this.y, this.spriteWidth, this.spriteHeight)
     }
 }
@@ -310,19 +312,28 @@ function drawScore(): void {
     //score
     ctxS.font = "30px Impact"
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 52, 75)
+    ctxS.fillText("Score: " + score, 52, 78)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Score: " + score, 53, 76)
+    ctxS.fillText("Score: " + score, 53, 79)
     ctxS.fillStyle = "black"
-    ctxS.fillText("Score: " + score, 54, 76)
+    ctxS.fillText("Score: " + score, 54, 79)
+    ctxS.fillStyle = "black"
+
+    //show powers
+    ctxS.font = "25px Impact"
+    ctxS.fillText("Power: " + power, 52, 45)
+    ctxS.fillStyle = "white"
+    ctxS.fillText("Power: " + power, 53, 46)
+    ctxS.fillStyle = "green"
+    ctxS.fillText("Power: " + power, 54, 47)
     ctxS.fillStyle = "black"
     //highScore
     ctxS.font = "25px Impact"
-    ctxS.fillText("High Score: " + highScore, 52, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 52, 136 - 25)
     ctxS.fillStyle = "white"
-    ctxS.fillText("High Score: " + highScore, 53, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 53, 136 - 25)
     ctxS.fillStyle = "black"
-    ctxS.fillText("High Score: " + highScore, 54, 136 - 30)
+    ctxS.fillText("High Score: " + highScore, 54, 136 - 25)
 }
 
 
@@ -377,7 +388,7 @@ window.addEventListener("click", (e: MouseEvent) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true
             score++
-            if (Math.random() * 5 > .2) {
+            if (Math.random() * 5 > .1) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width))
             } else {
                 //draw booster here
@@ -386,7 +397,33 @@ window.addEventListener("click", (e: MouseEvent) => {
         }
     })
     if (score > highScore) highScore = score
+
+    Items.forEach((item: Item) => {
+        const getItem = new Audio()
+        getItem.src = "../assets/sounds/getItem.wav"
+        if ((e.offsetX > item.x) &&
+            (e.offsetX < item.x + item.width) &&
+            (e.offsetY > item.y) &&
+            (e.offsetY < item.y + item.height)) {
+            getItem.play()
+            power++
+            item.markedForDeletion = true
+        }
+    })
 })
+//using the power
+window.addEventListener('keypress', (e: KeyboardEvent) => {
+    if (e.key === " " && ravens.length !== 0 && power > 0) {
+        power--
+        ravens.forEach((raven: Raven) => {
+            explozers.push(new Explosion(raven.x, raven.y, raven.width))
+            score++
+            raven.markedForDeletion = true
+        });
+    }
+})
+
+
 
 //to run the animation
 function animate(timestamep: number): void {
@@ -407,10 +444,10 @@ function animate(timestamep: number): void {
         })
     }
 
-    [...particles, ...ravens, ...explozers, ...Items].forEach((object: (Raven | Explosion | Particle | Item)): void => {
+    [...Items, ...particles, ...ravens, ...explozers,].forEach((object: (Raven | Explosion | Particle | Item)): void => {
         object.update(deltaTime)
     });
-    [...particles, ...ravens, ...explozers, ...Items].forEach((object: (Raven | Explosion | Particle | Item)): void => {
+    [...Items, ...particles, ...ravens, ...explozers,].forEach((object: (Raven | Explosion | Particle | Item)): void => {
         object.draw()
     });
     manageSpeed()
