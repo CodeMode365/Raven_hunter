@@ -2,7 +2,7 @@
 const replayBtn = document.getElementById("replay");
 replayBtn.style.display = "none";
 replayBtn.onclick = () => {
-    window.location.reload();
+    retry();
 };
 const canvas = document.getElementById("shootGame");
 const ctxS = canvas.getContext("2d");
@@ -302,7 +302,7 @@ window.addEventListener("click", (e) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true;
             score++;
-            if (Math.random() * 4 > .2) {
+            if (Math.random() * 5 > .2) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width));
             }
             else {
@@ -347,3 +347,15 @@ function animate(timestamep) {
         GAME_OVER();
 }
 animate(0);
+function retry() {
+    ctxS.restore();
+    ravens = [];
+    particles = [];
+    explozers = [];
+    Items = [];
+    score = 0;
+    replayBtn.style.display = "none";
+    music.src = "../assets/sounds/music.mp3";
+    gameOver = false;
+    animate(0);
+}
