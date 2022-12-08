@@ -5,11 +5,11 @@ replayBtn.onclick = () => {
     retry();
 };
 const canvas = document.getElementById("shootGame");
-const ctxS = canvas.getContext("2d");
+const ctxS = canvas.getContext("2d", { willReadFrequently: true });
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const collisioncanvas = document.getElementById("collisionCanvas");
-const collisionCTX = collisioncanvas.getContext("2d");
+const collisionCTX = collisioncanvas.getContext("2d", { willReadFrequently: true });
 collisioncanvas.width = window.innerWidth;
 collisioncanvas.height = window.innerHeight;
 const smallScreen = canvas.width <= 600 ? true : false;

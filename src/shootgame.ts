@@ -8,14 +8,14 @@ replayBtn.onclick = () => {
 }
 //main canavs
 const canvas: HTMLCanvasElement = document.getElementById("shootGame")
-const ctxS: CanvasRenderingContext2D = canvas.getContext("2d")
+const ctxS: CanvasRenderingContext2D = canvas.getContext("2d", { willReadFrequently: true })
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 //canvas for detecting collition
 const collisioncanvas: HTMLCanvasElement = document.getElementById("collisionCanvas")
-const collisionCTX: CanvasRenderingContext2D = collisioncanvas.getContext("2d")
+const collisionCTX: CanvasRenderingContext2D = collisioncanvas.getContext("2d", { willReadFrequently: true })
 
 collisioncanvas.width = window.innerWidth
 collisioncanvas.height = window.innerHeight
