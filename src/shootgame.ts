@@ -55,12 +55,12 @@ function playMusic(): void {
 let timeToNextRaven: number = 0
 let lastTime: number = 0
 let score = 0
-let ravenIntarval: number = 900;
+let ravenIntarval: number = 2000;
 //change raven interval with increaing score
 const changeRvnInterval = () => {
-    if (score <= 15) ravenIntarval = 750
-    else if (score <= 30) ravenIntarval = 900
-    else if (score <= 45) ravenIntarval = 850
+    if (score <= 15) ravenIntarval = 2000
+    else if (score <= 30) ravenIntarval = 1500
+    else if (score <= 45) ravenIntarval = 1000
     else if (score <= 60) ravenIntarval = 800
     else if (score <= 75) ravenIntarval = 750
     else if (score <= 90) ravenIntarval = 700
@@ -68,11 +68,7 @@ const changeRvnInterval = () => {
     else if (score <= 120) ravenIntarval = 600
     else if (score <= 135) ravenIntarval = 550
     else if (score <= 150) ravenIntarval = 500
-    else if (score <= 165) ravenIntarval = 450
-    else if (score <= 180) ravenIntarval = 400
-    else if (score <= 195) ravenIntarval = 350
-    else if (score >= 210) ravenIntarval = 300
-
+    else if (score >= 150) ravenIntarval = 400
 }
 let gameOver: boolean = false
 let overCount: number = 0
@@ -134,7 +130,7 @@ class Item {
     private spriteWidth = 150
     private spriteHeight = 150
     private itemImage: HTMLImageElement = new Image()
-    private itemEffect: HTMLAudioElement = new Audio()
+    // private itemEffect: HTMLAudioElement = new Audio()
     readonly x: number
     public y: number
     // private frame = 1
@@ -148,8 +144,8 @@ class Item {
         this.x = x
         this.y = y
         this.itemImage.src = "../assets/booster.png"
-        this.itemEffect.src = "../assets/sounds/coins.wav"
-        this.itemEffect.play()
+        // this.itemEffect.src = "../assets/sounds/coins.wav"
+        // this.itemEffect.play()
         // this.size = size
     }
     public update(deltaTime: number): void {
@@ -395,6 +391,7 @@ window.addEventListener("click", (e: MouseEvent) => {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width))
             } else {
                 //draw booster here
+                explozers.push(new Explosion(raven.x, raven.y, raven.width))
                 Items.push(new Item(raven.x, raven.y))
             }
         }
@@ -430,7 +427,7 @@ window.addEventListener('keypress', (e: KeyboardEvent) => {
 
 //to run the animation
 function animate(timestamep: number): void {
-    if (score < 220) changeRvnInterval();
+    changeRvnInterval();
     ctxS.clearRect(0, 0, canvas.width, canvas.height)
     collisionCTX.clearRect(0, 0, canvas.width, canvas.height)
     const deltaTime = timestamep - lastTime
@@ -474,6 +471,7 @@ function retry(): void {
     explozers = []
     Items = []
     score = 0
+    drawScore()
     replayBtn.style.display = "none"
     music.src = "../assets/sounds/music.mp3"
     gameOver = false

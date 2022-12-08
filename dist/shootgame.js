@@ -37,14 +37,14 @@ function playMusic() {
 let timeToNextRaven = 0;
 let lastTime = 0;
 let score = 0;
-let ravenIntarval = 900;
+let ravenIntarval = 2000;
 const changeRvnInterval = () => {
     if (score <= 15)
-        ravenIntarval = 750;
+        ravenIntarval = 2000;
     else if (score <= 30)
-        ravenIntarval = 900;
+        ravenIntarval = 1500;
     else if (score <= 45)
-        ravenIntarval = 850;
+        ravenIntarval = 1000;
     else if (score <= 60)
         ravenIntarval = 800;
     else if (score <= 75)
@@ -59,14 +59,8 @@ const changeRvnInterval = () => {
         ravenIntarval = 550;
     else if (score <= 150)
         ravenIntarval = 500;
-    else if (score <= 165)
-        ravenIntarval = 450;
-    else if (score <= 180)
+    else if (score >= 150)
         ravenIntarval = 400;
-    else if (score <= 195)
-        ravenIntarval = 350;
-    else if (score >= 210)
-        ravenIntarval = 300;
 };
 let gameOver = false;
 let overCount = 0;
@@ -118,7 +112,6 @@ class Item {
         this.spriteWidth = 150;
         this.spriteHeight = 150;
         this.itemImage = new Image();
-        this.itemEffect = new Audio();
         this.timeSinceLastFrame = 0;
         this.frameInterval = 100;
         this.markedForDeletion = false;
@@ -128,8 +121,6 @@ class Item {
         this.x = x;
         this.y = y;
         this.itemImage.src = "../assets/booster.png";
-        this.itemEffect.src = "../assets/sounds/coins.wav";
-        this.itemEffect.play();
     }
     update(deltaTime) {
         this.angle += .5;
@@ -314,6 +305,7 @@ window.addEventListener("click", (e) => {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width));
             }
             else {
+                explozers.push(new Explosion(raven.x, raven.y, raven.width));
                 Items.push(new Item(raven.x, raven.y));
             }
         }
@@ -344,8 +336,7 @@ window.addEventListener('keypress', (e) => {
     }
 });
 function animate(timestamep) {
-    if (score < 220)
-        changeRvnInterval();
+    changeRvnInterval();
     ctxS.clearRect(0, 0, canvas.width, canvas.height);
     collisionCTX.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timestamep - lastTime;
@@ -384,6 +375,7 @@ function retry() {
     explozers = [];
     Items = [];
     score = 0;
+    drawScore();
     replayBtn.style.display = "none";
     music.src = "../assets/sounds/music.mp3";
     gameOver = false;
