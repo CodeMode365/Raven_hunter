@@ -119,12 +119,12 @@ class Item {
         this.spriteHeight = 150;
         this.itemImage = new Image();
         this.itemEffect = new Audio();
-        this.frame = 1;
         this.timeSinceLastFrame = 0;
         this.frameInterval = 100;
         this.markedForDeletion = false;
         this.width = this.spriteWidth / 3;
         this.height = this.spriteHeight / 3;
+        this.angle = 0;
         this.x = x;
         this.y = y;
         this.itemImage.src = "../assets/booster.png";
@@ -132,6 +132,12 @@ class Item {
         this.itemEffect.play();
     }
     update(deltaTime) {
+        this.angle += .5;
+        this.timeSinceLastFrame += deltaTime;
+        if (this.timeSinceLastFrame > this.frameInterval) {
+            this.timeSinceLastFrame = 0;
+            this.y += Math.sin(this.angle) * 5;
+        }
     }
     draw() {
         ctxS.fillStyle = "black";
@@ -304,7 +310,7 @@ window.addEventListener("click", (e) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true;
             score++;
-            if (Math.random() * 5 > .1) {
+            if (Math.random() * 5 > 4) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width));
             }
             else {

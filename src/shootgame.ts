@@ -136,13 +136,14 @@ class Item {
     private itemImage: HTMLImageElement = new Image()
     private itemEffect: HTMLAudioElement = new Audio()
     readonly x: number
-    readonly y: number
-    private frame = 1
+    public y: number
+    // private frame = 1
     private timeSinceLastFrame = 0
     private frameInterval = 100
     public markedForDeletion = false
     readonly width = this.spriteWidth / 3
     readonly height = this.spriteHeight / 3
+    private angle = 0
     constructor(x: number, y: number) {
         this.x = x
         this.y = y
@@ -152,18 +153,20 @@ class Item {
         // this.size = size
     }
     public update(deltaTime: number): void {
-        // increaing the frame picture slowly
-        // if (this.timeSinceLastFrame > this.frameInterval) {
-        //     this.frame++
-        //     this.timeSinceLastFrame = 0
-        //     if (this.frame > 5) { this.markedForDeletion = true }
-        // }
+        this.angle += .5
+
+        this.timeSinceLastFrame += deltaTime
+
+        // shaking the item slowly
+        if (this.timeSinceLastFrame > this.frameInterval) {
+            this.timeSinceLastFrame = 0
+            this.y += Math.sin(this.angle) * 5
+        }
     }
     public draw(): void {
         ctxS.fillStyle = "black"
         // ctxS.strokeRect(this.x, this.y, this.width, this.height)
         ctxS.drawImage(this.itemImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
-        // ctxS.drawImage(this.itemImage, this.x, this.y, this.spriteWidth, this.spriteHeight)
     }
 }
 
@@ -388,7 +391,7 @@ window.addEventListener("click", (e: MouseEvent) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true
             score++
-            if (Math.random() * 5 > .1) {
+            if (Math.random() * 5 > 4) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width))
             } else {
                 //draw booster here
