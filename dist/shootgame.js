@@ -194,22 +194,22 @@ class Raven {
         if (score <= 50) {
             this.creatureImage.src = "../assets/raven.png";
         }
-        else if (score <= 80) {
+        else if (score <= 100) {
             this.creatureImage.src = "../assets/pink_raven.png";
         }
-        else if (score <= 100) {
+        else if (score <= 150) {
             this.creatureImage.src = "../assets/blue_raven.png";
         }
-        else if (score <= 150) {
+        else if (score <= 200) {
             this.creatureImage.src = "../assets/purple_raven.png";
         }
         else if (score <= 250) {
             this.creatureImage.src = "../assets/yellow_raven.png";
         }
-        else if (score <= 250) {
+        else if (score <= 350) {
             this.creatureImage.src = "../assets/green_raven.png";
         }
-        else if (score <= 300) {
+        else if (score <= 450) {
             this.creatureImage.src = "../assets/Boss2.png";
         }
         else {
