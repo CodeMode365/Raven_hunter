@@ -23,20 +23,20 @@ collisioncanvas.height = window.innerHeight
 //if small screen or no?
 const smallScreen = canvas.width <= 600 ? true : false
 
-//incresing speed points
-const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000]
-const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980]
-let increaseSpeed = false
-/*incresing speed logic at some points */
-function manageSpeed(): void {
+// //incresing speed points
+// const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000]
+// const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980]
+// let increaseSpeed = false
+// /*incresing speed logic at some points */
+// function manageSpeed(): void {
 
-    speedIncreasingPoints.forEach(incPoint => {
-        if (score === incPoint) increaseSpeed = true
-    })
-    speedDecreadingPoints.forEach(dcrPoint => {
-        if (score === dcrPoint) increaseSpeed = false
-    })
-}
+//     speedIncreasingPoints.forEach(incPoint => {
+//         if (score === incPoint) increaseSpeed = true
+//     })
+//     speedDecreadingPoints.forEach(dcrPoint => {
+//         if (score === dcrPoint) increaseSpeed = false
+//     })
+// }
 
 
 
@@ -188,6 +188,7 @@ class Raven {
     private GenColor: string
     public markedForDeletion: boolean
     private hasTrail: boolean
+    private speedModifier: number
     constructor() {
         this.sizeModifier = Math.random() * 0.6 + 0.5
         this.spriteWidth = 271
@@ -196,23 +197,15 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier
         this.x = canvas.width
         this.y = Math.random() * (canvas.height - this.height)
+        this.speedModifier = smallScreen ? 2 : 4
 
         //for new creature in incresing score
-        if (increaseSpeed) {
-            this.creatureImage.src = "../assets/red_raven.png"
-            if (smallScreen) {
-                this.directionX = Math.random() * 3 + 3
-            }
-            else {
-                this.directionX = Math.random() * 5.5 + 7
-            }
+
+        this.creatureImage.src = "../assets/blue_raven.png"
+        if (smallScreen) {
+            this.directionX = Math.random() * 2 + 1
         } else {
-            this.creatureImage.src = "../assets/blue_raven.png"
-            if (smallScreen) {
-                this.directionX = Math.random() * 2 + 1
-            } else {
-                this.directionX = Math.random() * 4 + 3
-            }
+            this.directionX = Math.random() * this.speedModifier + 3
         }
 
 
@@ -228,9 +221,6 @@ class Raven {
     public update(deltaTime: number): void {
         this.x -= this.directionX
         this.y += this.directionY
-
-
-
         if (this.y < 0 || this.y > canvas.height - this.height) {
             this.directionY = this.directionY * -1
         }
@@ -254,12 +244,48 @@ class Raven {
             this.markedForDeletion = true
         }
         if (this.x < 0 - this.width) gameOver = true
+        this.incSpeed()
     }
     //draw the raven
     public draw(): void {
         collisionCTX.fillStyle = this.GenColor
         collisionCTX.fillRect(this.x, this.y, this.width, this.height)
         ctxS.drawImage(this.creatureImage, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
+    }
+
+    incSpeed() {
+
+        for (let i = 1; i <= 20; i++) {
+            switch (score) {
+                case 20 * i:
+                    this.speedModifier += 0.2
+            }
+
+        }
+        if (score <= 50) {
+            this.creatureImage.src = "../assets/raven.png"
+        }
+        else if (score <= 80) {
+            this.creatureImage.src = "../assets/pink_raven.png"
+        }
+        else if (score <= 100) {
+            this.creatureImage.src = "../assets/blue_raven.png"
+        }
+        else if (score <= 150) {
+            this.creatureImage.src = "../assets/purple_raven.png"
+        }
+        else if (score <= 250) {
+            this.creatureImage.src = "../assets/yellow_raven.png"
+        }
+        else if (score <= 250) {
+            this.creatureImage.src = "../assets/green_raven.png"
+        }
+        else if (score <= 300) {
+            this.creatureImage.src = "../assets/Boss2.png"
+        } else {
+            this.creatureImage.src = "../assets/red_raven.png"
+        }
+
     }
 
 }
@@ -450,7 +476,7 @@ function animate(timestamep: number): void {
     [...Items, ...particles, ...ravens, ...explozers,].forEach((object: (Raven | Explosion | Particle | Item)): void => {
         object.draw()
     });
-    manageSpeed()
+    // manageSpeed()
     ravens = ravens.filter((raven: Raven) => !raven.markedForDeletion)
     explozers = explozers.filter((explozer: Explosion) => !explozer.markedForDeletion)
     particles = particles.filter((particle: Particle) => !particle.markedTodeletion)

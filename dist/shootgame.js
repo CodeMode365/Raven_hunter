@@ -13,19 +13,6 @@ const collisionCTX = collisioncanvas.getContext("2d", { willReadFrequently: true
 collisioncanvas.width = window.innerWidth;
 collisioncanvas.height = window.innerHeight;
 const smallScreen = canvas.width <= 600 ? true : false;
-const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000];
-const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980];
-let increaseSpeed = false;
-function manageSpeed() {
-    speedIncreasingPoints.forEach(incPoint => {
-        if (score === incPoint)
-            increaseSpeed = true;
-    });
-    speedDecreadingPoints.forEach(dcrPoint => {
-        if (score === dcrPoint)
-            increaseSpeed = false;
-    });
-}
 const music = new Audio();
 music.src = "../assets/sounds/music.mp3";
 function playMusic() {
@@ -148,23 +135,13 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier;
         this.x = canvas.width;
         this.y = Math.random() * (canvas.height - this.height);
-        if (increaseSpeed) {
-            this.creatureImage.src = "../assets/red_raven.png";
-            if (smallScreen) {
-                this.directionX = Math.random() * 3 + 3;
-            }
-            else {
-                this.directionX = Math.random() * 5.5 + 7;
-            }
+        this.speedModifier = smallScreen ? 2 : 4;
+        this.creatureImage.src = "../assets/blue_raven.png";
+        if (smallScreen) {
+            this.directionX = Math.random() * 2 + 1;
         }
         else {
-            this.creatureImage.src = "../assets/blue_raven.png";
-            if (smallScreen) {
-                this.directionX = Math.random() * 2 + 1;
-            }
-            else {
-                this.directionX = Math.random() * 4 + 3;
-            }
+            this.directionX = Math.random() * this.speedModifier + 3;
         }
         this.directionY = Math.random() * 5 - 2.5;
         this.markedForDeletion = false;
@@ -200,11 +177,44 @@ class Raven {
         }
         if (this.x < 0 - this.width)
             gameOver = true;
+        this.incSpeed();
     }
     draw() {
         collisionCTX.fillStyle = this.GenColor;
         collisionCTX.fillRect(this.x, this.y, this.width, this.height);
         ctxS.drawImage(this.creatureImage, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+    }
+    incSpeed() {
+        for (let i = 1; i <= 20; i++) {
+            switch (score) {
+                case 20 * i:
+                    this.speedModifier += 0.2;
+            }
+        }
+        if (score <= 50) {
+            this.creatureImage.src = "../assets/raven.png";
+        }
+        else if (score <= 80) {
+            this.creatureImage.src = "../assets/pink_raven.png";
+        }
+        else if (score <= 100) {
+            this.creatureImage.src = "../assets/blue_raven.png";
+        }
+        else if (score <= 150) {
+            this.creatureImage.src = "../assets/purple_raven.png";
+        }
+        else if (score <= 250) {
+            this.creatureImage.src = "../assets/yellow_raven.png";
+        }
+        else if (score <= 250) {
+            this.creatureImage.src = "../assets/green_raven.png";
+        }
+        else if (score <= 300) {
+            this.creatureImage.src = "../assets/Boss2.png";
+        }
+        else {
+            this.creatureImage.src = "../assets/red_raven.png";
+        }
     }
 }
 let particles = [];
@@ -357,7 +367,6 @@ function animate(timestamep) {
     [...Items, ...particles, ...ravens, ...explozers,].forEach((object) => {
         object.draw();
     });
-    manageSpeed();
     ravens = ravens.filter((raven) => !raven.markedForDeletion);
     explozers = explozers.filter((explozer) => !explozer.markedForDeletion);
     particles = particles.filter((particle) => !particle.markedTodeletion);
