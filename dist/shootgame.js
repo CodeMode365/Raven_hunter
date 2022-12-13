@@ -188,7 +188,7 @@ class Raven {
         for (let i = 1; i <= 20; i++) {
             switch (score) {
                 case 20 * i:
-                    this.speedModifier += 0.2;
+                    this.speedModifier += 0.4;
             }
         }
         if (score <= 50) {
