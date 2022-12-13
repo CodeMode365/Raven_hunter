@@ -149,7 +149,7 @@ class Raven {
         this.x = canvas.width;
         this.y = Math.random() * (canvas.height - this.height);
         if (increaseSpeed) {
-            this.creatureImage.src = "../assets/Boss2.png";
+            this.creatureImage.src = "../assets/red_raven.png";
             if (smallScreen) {
                 this.directionX = Math.random() * 3 + 3;
             }
@@ -158,7 +158,7 @@ class Raven {
             }
         }
         else {
-            this.creatureImage.src = "../assets/raven.png";
+            this.creatureImage.src = "../assets/blue_raven.png";
             if (smallScreen) {
                 this.directionX = Math.random() * 2 + 1;
             }
@@ -301,7 +301,7 @@ window.addEventListener("click", (e) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true;
             score++;
-            if (Math.random() * 5 > 4) {
+            if (Math.random() * 5 > .1) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width));
             }
             else {
