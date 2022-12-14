@@ -23,21 +23,7 @@ collisioncanvas.height = window.innerHeight
 //if small screen or no?
 const smallScreen = canvas.width <= 600 ? true : false
 
-// //incresing speed points
-// const speedIncreasingPoints = [50, 100, 170, 250, 345, 420, 500, 620, 720, 780, 830, 950, 1000]
-// const speedDecreadingPoints = [58, 115, 200, 280, 360, 450, 550, 690, 730, 800, 900, 980]
-// let increaseSpeed = false
-// /*incresing speed logic at some points */
-// function manageSpeed(): void {
-
-//     speedIncreasingPoints.forEach(incPoint => {
-//         if (score === incPoint) increaseSpeed = true
-//     })
-//     speedDecreadingPoints.forEach(dcrPoint => {
-//         if (score === dcrPoint) increaseSpeed = false
-//     })
-// }
-
+//incresing speed points
 
 
 //main game music
@@ -189,7 +175,8 @@ class Raven {
     private GenColor: string
     public markedForDeletion: boolean
     private hasTrail: boolean
-    private speedModifier: number
+    private speedModifier: number = 4
+    private speedAdditional = 3
     constructor() {
         this.sizeModifier = Math.random() * 0.6 + 0.5
         this.spriteWidth = 271
@@ -198,16 +185,13 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier
         this.x = canvas.width
         this.y = Math.random() * (canvas.height - this.height)
-        this.speedModifier = smallScreen ? 2 : 4
+        // this.speedModifier = smallScreen ? 2 : 4
 
         //for new creature in incresing score
 
         this.creatureImage.src = "../assets/blue_raven.png"
-        if (smallScreen) {
-            this.directionX = Math.random() * 2 + 1
-        } else {
-            this.directionX = Math.random() * this.speedModifier + 3
-        }
+        this.incSpeed()
+        this.directionX = Math.random() * this.speedModifier + this.speedAdditional
 
 
         this.directionY = Math.random() * 5 - 2.5
@@ -218,11 +202,11 @@ class Raven {
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)]
         this.GenColor = `rgba(${this.randmColor[0]},${this.randmColor[1]},${this.randmColor[2]})`
         this.hasTrail = Math.random() < .5
+        console.log(`${this.directionX}, ${this.speedModifier}, ${this.speedAdditional}`)
     }
     public update(deltaTime: number): void {
         this.x -= this.directionX
         this.y += this.directionY
-        // console.log(this.speedModifier)
         if (this.y < 0 || this.y > canvas.height - this.height) {
             this.directionY = this.directionY * -1
         }
@@ -246,7 +230,6 @@ class Raven {
             this.markedForDeletion = true
         }
         if (this.x < 0 - this.width) gameOver = true
-        this.incSpeed()
     }
     //draw the raven
     public draw(): void {
@@ -256,27 +239,87 @@ class Raven {
     }
 
     incSpeed() {
+        //change the speed of new raven
+        switch (true) {
+            case score <= 20:
+                this.speedModifier = 4
+                this.speedAdditional = 3
+                break;
+            case score <= 35:
+                this.speedModifier = 5
+                this.speedAdditional = 3
+                break;
+            case score <= 55:
+                this.sizeModifier = 5
+                this.speedAdditional = 4
+                break;
+            case score <= 75:
+                this.speedModifier = 5
+                this.speedAdditional = 5
+                break;
+            case score <= 90:
+                this.speedModifier = 6
+                this.speedAdditional = 5
+                break;
+            case score <= 110:
+                this.speedModifier = 6
+                this.speedAdditional = 6
+                break;
+            case score <= 130:
+                this.speedModifier = 7
+                this.speedAdditional = 6
+                break;
+            case score <= 145:
+                this.speedModifier = 7
+                this.speedAdditional = 7
+                break;
+            case score <= 160:
+                this.speedModifier = 8
+                this.speedAdditional = 7
+                break;
+            case score <= 190:
+                this.speedModifier = 8
+                this.speedAdditional = 8
+                break;
+            case score <= 210:
+                this.speedModifier = 9
+                this.speedAdditional = 8
+                break;
+            case score < 235:
+                this.speedModifier = 9
+                this.speedAdditional = 9
+                break;
+            case score >= 235:
+                this.speedModifier = 10
+                this.speedAdditional = 9
+                break
+            default:
+                this.speedModifier = 10
+                this.speedAdditional = 10
+
+        }
 
 
+        //change the image on new ravens
         if (score <= 50) {
             this.creatureImage.src = "../assets/raven.png"
         }
-        else if (score <= 100) {
+        else if (score <= 150) {
             this.creatureImage.src = "../assets/pink_raven.png"
         }
-        else if (score <= 150) {
+        else if (score <= 250) {
             this.creatureImage.src = "../assets/blue_raven.png"
         }
-        else if (score <= 200) {
+        else if (score <= 350) {
             this.creatureImage.src = "../assets/purple_raven.png"
         }
-        else if (score <= 250) {
+        else if (score <= 450) {
             this.creatureImage.src = "../assets/yellow_raven.png"
         }
-        else if (score <= 350) {
+        else if (score <= 550) {
             this.creatureImage.src = "../assets/green_raven.png"
         }
-        else if (score <= 450) {
+        else if (score <= 650) {
             this.creatureImage.src = "../assets/Boss2.png"
         } else {
             this.creatureImage.src = "../assets/red_raven.png"

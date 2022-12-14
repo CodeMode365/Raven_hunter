@@ -128,6 +128,8 @@ class Raven {
         this.creatureImage = new Image();
         this.frame = 0;
         this.maxFrame = 4;
+        this.speedModifier = 4;
+        this.speedAdditional = 3;
         this.sizeModifier = Math.random() * 0.6 + 0.5;
         this.spriteWidth = 271;
         this.spriteHeight = 194;
@@ -135,14 +137,9 @@ class Raven {
         this.height = this.spriteHeight / 2 * this.sizeModifier;
         this.x = canvas.width;
         this.y = Math.random() * (canvas.height - this.height);
-        this.speedModifier = smallScreen ? 2 : 4;
         this.creatureImage.src = "../assets/blue_raven.png";
-        if (smallScreen) {
-            this.directionX = Math.random() * 2 + 1;
-        }
-        else {
-            this.directionX = Math.random() * this.speedModifier + 3;
-        }
+        this.incSpeed();
+        this.directionX = Math.random() * this.speedModifier + this.speedAdditional;
         this.directionY = Math.random() * 5 - 2.5;
         this.markedForDeletion = false;
         this.timeSinceFlap = 0;
@@ -150,6 +147,7 @@ class Raven {
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
         this.GenColor = `rgba(${this.randmColor[0]},${this.randmColor[1]},${this.randmColor[2]})`;
         this.hasTrail = Math.random() < .5;
+        console.log(`${this.directionX}, ${this.speedModifier}, ${this.speedAdditional}`);
     }
     update(deltaTime) {
         this.x -= this.directionX;
@@ -177,7 +175,6 @@ class Raven {
         }
         if (this.x < 0 - this.width)
             gameOver = true;
-        this.incSpeed();
     }
     draw() {
         collisionCTX.fillStyle = this.GenColor;
@@ -185,25 +182,82 @@ class Raven {
         ctxS.drawImage(this.creatureImage, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
     }
     incSpeed() {
+        switch (true) {
+            case score <= 20:
+                this.speedModifier = 4;
+                this.speedAdditional = 3;
+                break;
+            case score <= 35:
+                this.speedModifier = 5;
+                this.speedAdditional = 3;
+                break;
+            case score <= 55:
+                this.sizeModifier = 5;
+                this.speedAdditional = 4;
+                break;
+            case score <= 75:
+                this.speedModifier = 5;
+                this.speedAdditional = 5;
+                break;
+            case score <= 90:
+                this.speedModifier = 6;
+                this.speedAdditional = 5;
+                break;
+            case score <= 110:
+                this.speedModifier = 6;
+                this.speedAdditional = 6;
+                break;
+            case score <= 130:
+                this.speedModifier = 7;
+                this.speedAdditional = 6;
+                break;
+            case score <= 145:
+                this.speedModifier = 7;
+                this.speedAdditional = 7;
+                break;
+            case score <= 160:
+                this.speedModifier = 8;
+                this.speedAdditional = 7;
+                break;
+            case score <= 190:
+                this.speedModifier = 8;
+                this.speedAdditional = 8;
+                break;
+            case score <= 210:
+                this.speedModifier = 9;
+                this.speedAdditional = 8;
+                break;
+            case score < 235:
+                this.speedModifier = 9;
+                this.speedAdditional = 9;
+                break;
+            case score >= 235:
+                this.speedModifier = 10;
+                this.speedAdditional = 9;
+                break;
+            default:
+                this.speedModifier = 10;
+                this.speedAdditional = 10;
+        }
         if (score <= 50) {
             this.creatureImage.src = "../assets/raven.png";
         }
-        else if (score <= 100) {
+        else if (score <= 150) {
             this.creatureImage.src = "../assets/pink_raven.png";
         }
-        else if (score <= 150) {
+        else if (score <= 250) {
             this.creatureImage.src = "../assets/blue_raven.png";
         }
-        else if (score <= 200) {
+        else if (score <= 350) {
             this.creatureImage.src = "../assets/purple_raven.png";
         }
-        else if (score <= 250) {
+        else if (score <= 450) {
             this.creatureImage.src = "../assets/yellow_raven.png";
         }
-        else if (score <= 350) {
+        else if (score <= 550) {
             this.creatureImage.src = "../assets/green_raven.png";
         }
-        else if (score <= 450) {
+        else if (score <= 650) {
             this.creatureImage.src = "../assets/Boss2.png";
         }
         else {
