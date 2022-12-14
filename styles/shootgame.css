@@ -35,11 +35,12 @@ body {
   background-image: url("../assets//Button.png");
   background-position: center;
   background-size: cover;
-  z-index: 220;
+  z-index: 999;
   transform: translate(-50%, -150%);
   transition: 0.5s all;
   top: 50%;
   left: 50%;
+
   /* display: none; */
 }
 .replay::before {

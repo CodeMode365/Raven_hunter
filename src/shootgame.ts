@@ -70,6 +70,7 @@ const changeRvnInterval = () => {
     else if (score <= 150) ravenIntarval = 500
     else if (score >= 150) ravenIntarval = 400
 }
+
 let gameOver: boolean = false
 let overCount: number = 0
 let power = 0
@@ -221,6 +222,7 @@ class Raven {
     public update(deltaTime: number): void {
         this.x -= this.directionX
         this.y += this.directionY
+        // console.log(this.speedModifier)
         if (this.y < 0 || this.y > canvas.height - this.height) {
             this.directionY = this.directionY * -1
         }
@@ -255,13 +257,7 @@ class Raven {
 
     incSpeed() {
 
-        for (let i = 1; i <= 20; i++) {
-            switch (score) {
-                case 20 * i:
-                    this.speedModifier += 0.5
-            }
 
-        }
         if (score <= 50) {
             this.creatureImage.src = "../assets/raven.png"
         }
@@ -337,28 +333,28 @@ function drawScore(): void {
     //score
     ctxS.font = "30px Impact"
     ctxS.fillStyle = "black";
-    ctxS.fillText("Score: " + score, 52, 78)
+    ctxS.fillText("Score: " + score, canvas.width / 2, 78)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Score: " + score, 53, 79)
+    ctxS.fillText("Score: " + score, canvas.width / 2 + 1, 79)
     ctxS.fillStyle = "black"
-    ctxS.fillText("Score: " + score, 54, 79)
+    ctxS.fillText("Score: " + score, canvas.width / 2 + 2, 79)
     ctxS.fillStyle = "black"
 
     //show powers
     ctxS.font = "25px Impact"
-    ctxS.fillText("Power: " + power, 52, 45)
+    ctxS.fillText("Power: " + power, canvas.width / 2, 45)
     ctxS.fillStyle = "white"
-    ctxS.fillText("Power: " + power, 53, 46)
+    ctxS.fillText("Power: " + power, canvas.width / 2 + 1, 46)
     ctxS.fillStyle = "green"
-    ctxS.fillText("Power: " + power, 54, 47)
+    ctxS.fillText("Power: " + power, canvas.width / 2 + 2, 47)
     ctxS.fillStyle = "black"
     //highScore
     ctxS.font = "25px Impact"
-    ctxS.fillText("High Score: " + highScore, 52, 136 - 25)
+    ctxS.fillText("High Score: " + highScore, canvas.width / 2, 136 - 25)
     ctxS.fillStyle = "white"
-    ctxS.fillText("High Score: " + highScore, 53, 136 - 25)
+    ctxS.fillText("High Score: " + highScore, canvas.width / 2 + 1, 136 - 25)
     ctxS.fillStyle = "black"
-    ctxS.fillText("High Score: " + highScore, 54, 136 - 25)
+    ctxS.fillText("High Score: " + highScore, canvas.width / 2 + 2, 136 - 25)
 }
 
 
@@ -413,7 +409,7 @@ window.addEventListener("click", (e: MouseEvent) => {
         if (raven.randmColor[0] == Math.floor(pc[0]) && raven.randmColor[1] == Math.floor(pc[1]) && raven.randmColor[2] == Math.floor(pc[2])) {
             raven.markedForDeletion = true
             score++
-            if (Math.random() * 5 > .1) {
+            if (Math.random() * 6 > .1) {
                 explozers.push(new Explosion(raven.x, raven.y, raven.width))
             } else {
                 //draw booster here
@@ -497,9 +493,10 @@ function retry(): void {
     explozers = []
     Items = []
     score = 0
-    drawScore()
+    // drawScore(66+100, 67+100, 68+100)
     replayBtn.style.display = "none"
     music.src = "../assets/sounds/music.mp3"
     gameOver = false
     animate(0)
+    // location.reload()
 }
