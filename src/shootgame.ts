@@ -242,60 +242,60 @@ class Raven {
         //change the speed of new raven
         switch (true) {
             case score <= 20:
-                this.speedModifier = 4
+                this.speedModifier = 3
                 this.speedAdditional = 3
                 break;
             case score <= 35:
-                this.speedModifier = 5
+                this.speedModifier = 3.5
                 this.speedAdditional = 3
                 break;
             case score <= 55:
-                this.sizeModifier = 5
-                this.speedAdditional = 4
+                this.sizeModifier = 4
+                this.speedAdditional = 3.5
                 break;
             case score <= 75:
+                this.speedModifier = 4
+                this.speedAdditional = 4
+                break;
+            case score <= 90:
+                this.speedModifier = 4.5
+                this.speedAdditional = 4.5
+                break;
+            case score <= 110:
+                this.speedModifier = 5
+                this.speedAdditional = 4.5
+                break;
+            case score <= 130:
                 this.speedModifier = 5
                 this.speedAdditional = 5
                 break;
-            case score <= 90:
-                this.speedModifier = 6
-                this.speedAdditional = 5
-                break;
-            case score <= 110:
-                this.speedModifier = 6
-                this.speedAdditional = 6
-                break;
-            case score <= 130:
-                this.speedModifier = 7
-                this.speedAdditional = 6
-                break;
             case score <= 145:
-                this.speedModifier = 7
-                this.speedAdditional = 7
+                this.speedModifier = 5.5
+                this.speedAdditional = 5.5
                 break;
             case score <= 160:
-                this.speedModifier = 8
-                this.speedAdditional = 7
+                this.speedModifier = 6
+                this.speedAdditional = 6
                 break;
             case score <= 190:
-                this.speedModifier = 8
-                this.speedAdditional = 8
+                this.speedModifier = 6.5
+                this.speedAdditional = 6.5
                 break;
             case score <= 210:
-                this.speedModifier = 9
-                this.speedAdditional = 8
+                this.speedModifier = 6.5
+                this.speedAdditional = 7
                 break;
             case score < 235:
-                this.speedModifier = 9
-                this.speedAdditional = 9
+                this.speedModifier = 6.5
+                this.speedAdditional = 7.5
                 break;
             case score >= 235:
-                this.speedModifier = 10
-                this.speedAdditional = 9
+                this.speedModifier = 8
+                this.speedAdditional = 8
                 break
             default:
-                this.speedModifier = 10
-                this.speedAdditional = 10
+                this.speedModifier = 9
+                this.speedAdditional = 9
 
         }
 
