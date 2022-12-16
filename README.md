@@ -1,9 +1,9 @@
-#Raven hunter game in ts
+# Raven hunter game in ts
 
 ## About the Game
-<h4>This is the simple and easy to play game in which a player has to hunt down the flying raven in the screen and not let them pass the screen. 
+<p>This is the simple and easy to play game in which a player has to hunt down the flying raven in the screen and not let them pass the screen. 
   If the reven passes the whole screen(canvas) then the game is over. The game is coded in the Typescript and compiled to Javascript so that all browser can support 
-  the game. In order to run the game the game must be run properly in live-server.</h4>
+  the game. In order to run the game the game must be run properly in live-server.</p>
 
 # Steps for installation 
 <ul>
