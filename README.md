@@ -29,6 +29,6 @@
   
     
 
-## Collaboration is free
+## Collaborators are welcomed
 
    
