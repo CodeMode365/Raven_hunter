@@ -16,7 +16,7 @@
 
 ## snapshot of GamePlay
 <p align="center">
-  <![Uploading Screenshot (29).png…]()
+  <img src="https://postimg.cc/y3qr3Dq7" alt="Gameplay image"/>
   <p>
 
   
