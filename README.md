@@ -10,7 +10,7 @@
 <li>Download the zip file or clone the repo</li>
 <li>To clone repo use: <code>git clone https://github.com/CodeMode365/Raven_hunter.git</code></li>
 <li>Navigate into the folder</li>
-  <li><code>npm i -g live-server</code></li>
+  <li>install live-server using: <code>npm i -g live-server</code></li>
 <li> run <code>live-server</code> in promt</li>
 </ul>
 
