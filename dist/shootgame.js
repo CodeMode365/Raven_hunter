@@ -147,7 +147,6 @@ class Raven {
         this.randmColor = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
         this.GenColor = `rgba(${this.randmColor[0]},${this.randmColor[1]},${this.randmColor[2]})`;
         this.hasTrail = Math.random() < .5;
-        console.log(`${this.directionX}, ${this.speedModifier}, ${this.speedAdditional}`);
     }
     update(deltaTime) {
         this.x -= this.directionX;
@@ -165,7 +164,7 @@ class Raven {
             }
             this.timeSinceFlap = 0;
             if (this.hasTrail) {
-                if (score > 40) {
+                if (score > 40 && particles.length <= 30) {
                     particles.push(new Particle(this.x, this.y, this.width, this.GenColor));
                 }
             }
@@ -193,10 +192,10 @@ class Raven {
                 break;
             case score <= 55:
                 this.sizeModifier = 4;
-                this.speedAdditional = 3.5;
+                this.speedAdditional = 4;
                 break;
             case score <= 75:
-                this.speedModifier = 4;
+                this.speedModifier = 4.5;
                 this.speedAdditional = 4;
                 break;
             case score <= 90:
@@ -208,19 +207,19 @@ class Raven {
                 this.speedAdditional = 4.5;
                 break;
             case score <= 130:
-                this.speedModifier = 5;
+                this.speedModifier = 5.5;
                 this.speedAdditional = 5;
                 break;
             case score <= 145:
                 this.speedModifier = 5.5;
-                this.speedAdditional = 5.5;
+                this.speedAdditional = 6;
                 break;
             case score <= 160:
-                this.speedModifier = 6;
+                this.speedModifier = 6.5;
                 this.speedAdditional = 6;
                 break;
             case score <= 190:
-                this.speedModifier = 6.5;
+                this.speedModifier = 7;
                 this.speedAdditional = 6.5;
                 break;
             case score <= 210:
@@ -228,16 +227,28 @@ class Raven {
                 this.speedAdditional = 7;
                 break;
             case score < 235:
-                this.speedModifier = 6.5;
+                this.speedModifier = 7.5;
                 this.speedAdditional = 7.5;
                 break;
             case score >= 235:
                 this.speedModifier = 8;
                 this.speedAdditional = 8;
                 break;
-            default:
+            case score >= 280:
+                this.speedModifier = 8.5;
+                this.speedAdditional = 8.5;
+                break;
+            case score >= 330:
                 this.speedModifier = 9;
                 this.speedAdditional = 9;
+                break;
+            case score >= 380:
+                this.speedModifier = 10;
+                this.speedAdditional = 10;
+                break;
+            default:
+                this.speedModifier = 12;
+                this.speedAdditional = 12;
         }
         if (score <= 50) {
             this.creatureImage.src = "../assets/raven.png";
@@ -401,7 +412,7 @@ function animate(timestamep) {
     lastTime = timestamep;
     timeToNextRaven += deltaTime;
     drawScore();
-    if (timeToNextRaven > ravenIntarval) {
+    if (timeToNextRaven > ravenIntarval && ravens.length <= 35) {
         ravens.push(new Raven());
         timeToNextRaven = 0;
         const newRav = new Raven();
@@ -435,5 +446,6 @@ function retry() {
     replayBtn.style.display = "none";
     music.src = "../assets/sounds/music.mp3";
     gameOver = false;
+    power = 0;
     animate(0);
 }
