@@ -1,4 +1,8 @@
 ﻿# GameDev
 # JetpackCrow
 # jetpact_crow with typescript
-## live now on <h4><a href="https://jet-pack-crow-e4lpwgebh-codemode365.vercel.app/">https://jet-pack-crow-e4lpwgebh-codemode365.vercel.app/</a></h4>
+
+<ul>
+<h4>Steps for installation</h4>
+<li>Download the zip file or clone the repo</ul>
+<li>use <code>git clone 
