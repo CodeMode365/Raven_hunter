@@ -14,12 +14,20 @@
 <li> run <code>live-server</code> in promt</li>
 </ul>
 
+# How to play
+<ul> 
+  <li>Just click on the raven</li>
+  <li>When you get an item or your power have power <strong>Press Space</strong> to kill all ravens on screen</li>
+  <li>Don't let the raven pass the through the screen</li>
+ </ul>
+
 ## Snapshot of GamePlay
 <p align="center">
   <img src="https://i.postimg.cc/4ynCMcBH/Screenshot-28.png" alt="Gameplay image" width="80%" />
   <p>
 
   
+    
 
 ## Collaboration is free
 
