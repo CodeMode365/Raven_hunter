@@ -1,4 +1,4 @@
-# Raven hunter game in ts(tupescript)/js(javascript)
+# Raven hunter game in ts(typescript)/js(javascript)
 
 ## About the Game
 <p>This is the simple and easy to play game in which a player has to hunt down the flying raven in the screen and not let them pass the screen. 
@@ -13,3 +13,5 @@
   <li><code>npm i -g live-server</code></li>
 <li> run <code>live-server</code> in promt</li>
 </ul>
+
+## collaboration is free
