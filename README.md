@@ -1,4 +1,4 @@
-# Raven hunter game in ts
+# Raven hunter game in ts(tupescript)/js(javascript)
 
 ## About the Game
 <p>This is the simple and easy to play game in which a player has to hunt down the flying raven in the screen and not let them pass the screen. 
