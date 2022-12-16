@@ -16,7 +16,7 @@
 
 ## snapshot of GamePlay
 <p align="center">
-  <img src="https://postimg.cc/y3qr3Dq7" alt="Gameplay image"/>
+  <img src="https://postimg.cc/y3qr3Dq7" alt="Gameplay image" width="500" height="200"/>
   <p>
 
   
