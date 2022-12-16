@@ -17,7 +17,7 @@
 # How to play
 <ul> 
   <li>Just click on the raven</li>
-  <li>When you get an item or you power have power greter than 0 <strong><i>Press Space</i></strong> to kill all ravens on screen</li>
+  <li>When you get an item or you power have power<strong><i>Press Space</i></strong> to kill all ravens on screen</li>
   <li>Don't let the raven pass the through the screen, that's all</li>
  </ul>
 
