@@ -14,4 +14,11 @@
 <li> run <code>live-server</code> in promt</li>
 </ul>
 
+## snapshot of GamePlay
+<p align="center">
+  <![Uploading Screenshot (29).png…]()
+  <p>
+
+  
+
 ## collaboration is free
