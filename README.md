@@ -20,9 +20,7 @@ The game is a simple and easy-to-play hunting game where the objective is to hun
 
 ## Snapshot of GamePlay
   ![img](https://i.postimg.cc/4ynCMcBH/Screenshot-28.png)
-    
 
-## Collaborators are welcomed
 ### How to start updating codes?
 
 * Clone the repo
