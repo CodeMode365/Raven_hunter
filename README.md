@@ -1,44 +1,36 @@
-# Raven hunter game in ts(typescript) / js(javascript)
+# Raven hunter game
 
 ## About the Game
-<p>This is the simple and easy to play game in which a player has to hunt down the flying raven in the screen and not let the raven pass through the screen. 
-  If the reven passes the whole screen(canvas) then the game is over. The game is coded in the Typescript and compiled to Javascript so that all browser can support 
-  the game. In order to run the game, the game must be run properly in live-server. Wroks fine in mobiles but still need some modification.</p>
+The game is a simple and easy-to-play hunting game where the objective is to hunt down a flying raven on the screen. The player must prevent the raven from passing through the entire screen, otherwise the game will be over. The game is developed using TypeScript and compiled into JavaScript to ensure compatibility with all browsers. To run the game, it is recommended to use a live-server and it runs smoothly on mobile devices, although some modifications may still be required.
 
 # Steps for installation 
-<ul>
-<li>Download the zip file or clone the repo</li>
-<li>To clone repo use: <code>git clone https://github.com/CodeMode365/Raven_hunter.git</code></li>
-<li>Navigate into the folder</li>
-  <li>install live-server using: <code>npm i -g live-server</code></li>
-<li> run <code>live-server</code> in promt</li>
+
+* Download the zip file or clone the repo
+* To clone repo use: ` git clone https://github.com/CodeMode365/Raven_hunter.git `
+* Navigate into the folder
+* install live-server using:` npm i -g live-server `
+*  run` live-server ` in promt
 </ul>
 
 # How to play
-<ul> 
-  <li>Just click on the raven</li>
-  <li>When you get an item or you have power <strong><i>Press Space</i></strong> to kill all ravens on the screen</li>
-  <li>Don't let the raven pass the through the screen, that's all</li>
- </ul>
+ 
+  * Just click on the raven
+  * When you get an item or you have power ***Press Space*** to kill all ravens on the screen
+  * Don't let the raven pass the through the screen, that's all
 
 ## Snapshot of GamePlay
-<p align="center">
-  <img src="https://i.postimg.cc/4ynCMcBH/Screenshot-28.png" alt="Gameplay image" width="80%" />
-  <p>
-
-  
+  ![img](https://i.postimg.cc/4ynCMcBH/Screenshot-28.png)
     
 
 ## Collaborators are welcomed
 ### How to start updating codes?
-<ul>
-<li>Clone the repo</li>
-<li>Extract and Navigate into the project folder</li>
-<li>Run <code>tsc -w</code> Note:typescript must be installed in your system</li>
-  <li>To install typescript: <code>npm i -g typescript</code></li>
-<li>Then Edit the typescript file in /src folder</li>
-<li>To view the changes run the code in live-server</li>
-</ul>
+
+* Clone the repo
+* Extract and Navigate into the project folder
+* Run `tsc -w ` Note:typescript must be installed in your system
+* To install typescript: ` npm i -g typescript `
+* Then Edit the typescript file in /src folder
+* To view the changes run the code in live-server
 
 ## Contributers are welcomed
 
